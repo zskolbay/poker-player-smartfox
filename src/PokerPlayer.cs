@@ -87,10 +87,17 @@ namespace Nancy.Simple
                     {
                         if (gameState.OwnCards.Any(
                                 card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank)))
-                            bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 50) - gameState.GetCurrentPlayer().Bet;
-                        else if (gameState.OwnCards.Any(card => (int)card.Rank >= 10))
+                            bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 100) - gameState.GetCurrentPlayer().Bet;
+                        else if (gameState.OwnCards.All(card => gameState.CommunityCards.Any(cc => cc.Rank <= card.Rank)))
                         {
-                            bet += gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
+                            //nem a mi kezünkben van a pár, de minden kártyánk nagyon a flopnál
+                            bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 50) -
+                                   gameState.GetCurrentPlayer().Bet;
+                        }
+                        else
+                        {
+                            //van pár, de béna kártyáink vannak, akkor csak tartjuk
+                            bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
                         }
                     }
                     else
