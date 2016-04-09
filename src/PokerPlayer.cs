@@ -142,7 +142,7 @@ namespace Nancy.Simple
                         else
                         {
                             //van pár, de béna kártyáink vannak, akkor csak tartjuk
-                            bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
+                            bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet + Math.Max(50, gameState.MinimumRaise);
                         }
 
                     }
