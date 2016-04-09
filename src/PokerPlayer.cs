@@ -26,7 +26,7 @@ namespace Nancy.Simple
             try
             {
                 Logger.LogHelper.Log("type=bet_begin action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
-                if (gameState.CommunityCards.Count() <= 2)
+                if (false)//(gameState.CommunityCards.Count() <= 2)
                 {
                     // Pre Flop
                     Logger.LogHelper.Log("type=Pre Flop block action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
@@ -88,10 +88,10 @@ namespace Nancy.Simple
                                   gameState.GetCurrentPlayer().Bet;
 
                         }
-                        else if (gameState.OwnCards.Any(card => (int)card.Rank >= 10))
-                        {
-                            bet += gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
-                        }
+                        //else if (gameState.OwnCards.Any(card => (int)card.Rank >= 10))
+                        //{
+                        //    bet += gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
+                        //}
 
                     }
                     else if (gameState.HasPair())
@@ -101,17 +101,17 @@ namespace Nancy.Simple
                         if (gameState.OwnCards.Any(
                                 card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank)))
                             bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 100) - gameState.GetCurrentPlayer().Bet;
-                        else if (gameState.OwnCards.All(card => gameState.CommunityCards.Any(cc => cc.Rank <= card.Rank)))
-                        {
-                            //nem a mi kezünkben van a pár, de minden kártyánk nagyon a flopnál
-                            bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 50) -
-                                   gameState.GetCurrentPlayer().Bet;
-                        }
-                        else
-                        {
-                            //van pár, de béna kártyáink vannak, akkor csak tartjuk
-                            bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
-                        }
+                        //else if (gameState.OwnCards.All(card => gameState.CommunityCards.Any(cc => cc.Rank <= card.Rank)))
+                        //{
+                        //    //nem a mi kezünkben van a pár, de minden kártyánk nagyon a flopnál
+                        //    bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 50) -
+                        //           gameState.GetCurrentPlayer().Bet;
+                        //}
+                        //else
+                        //{
+                        //    //van pár, de béna kártyáink vannak, akkor csak tartjuk
+                        //    bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
+                        //}
                     }
                     else
                     {
