@@ -27,7 +27,16 @@ namespace Nancy.Simple
             {
                 Logger.LogHelper.Log("type=bet_begin action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
 
-                if (gameState.GetCurrentPlayer().Stack < 100 && !gameState.IsSmallBlind() && !gameState.IsBigBlind())
+                bool pairOrThree = gameState.HasPair() || gameState.HasThreeOfAKind();
+                bool hasOneCardOfTwoOrThree = gameState.OwnCards.Any(
+                    card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank));
+
+                if (gameState.CurrentBuyIn >= 1000 && (pairOrThree && hasOneCardOfTwoOrThree))
+                {
+                    bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
+                }
+
+                else if (gameState.GetCurrentPlayer().Stack < 100 && !gameState.IsSmallBlind() && !gameState.IsBigBlind())
                 {
                     //nincs pénzünk ÉS nem vagyunk kis/nagy vak
                     bet = 0;
@@ -90,7 +99,7 @@ namespace Nancy.Simple
                                 card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank)))
                         {
 
-                            bet = gameState.CurrentBuyIn + Math.Min(gameState.MinimumRaise, 200) -
+                            bet = gameState.CurrentBuyIn + Math.Min(gameState.MinimumRaise, 500) -
                                   gameState.GetCurrentPlayer().Bet;
 
                         }
@@ -111,7 +120,7 @@ namespace Nancy.Simple
 
                         if (gameState.OwnCards.Any(
                                 card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank)))
-                            bet = gameState.CurrentBuyIn + Math.Min(gameState.MinimumRaise, 100) - gameState.GetCurrentPlayer().Bet;
+                            bet = gameState.CurrentBuyIn + Math.Min(gameState.MinimumRaise, 150) - gameState.GetCurrentPlayer().Bet;
                         //else if (gameState.OwnCards.All(card => gameState.CommunityCards.Any(cc => cc.Rank <= card.Rank)))
                         //{
                         //    //nem a mi kezünkben van a pár, de minden kártyánk nagyon a flopnál
