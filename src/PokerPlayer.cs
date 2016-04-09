@@ -39,7 +39,7 @@ namespace Nancy.Simple
 
 		    try
 		    {
-                Logger.LogHelper.Log("REQUEST='{0}'", req.Body.ToString());
+                Logger.LogHelper.Log("REQUEST='{0}'", jsonState.ToString());
 
 
                 foreach (var player in gameState.Players)
