@@ -141,7 +141,7 @@ namespace Nancy.Simple
 
                         if (gameState.OwnCards.Any(
                                 card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank)))
-                            bet = gameState.CurrentBuyIn + Math.Min(gameState.MinimumRaise, 150) - gameState.GetCurrentPlayer().Bet;
+                            bet = gameState.CurrentBuyIn + Math.Min(gameState.MinimumRaise, 200) - gameState.GetCurrentPlayer().Bet;
                         //else if (gameState.OwnCards.All(card => gameState.CommunityCards.Any(cc => cc.Rank <= card.Rank)))
                         //{
                         //    //nem a mi kezünkben van a pár, de minden kártyánk nagyon a flopnál
