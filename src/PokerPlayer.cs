@@ -77,61 +77,25 @@ namespace Nancy.Simple
                     Logger.LogHelper.Log("type=Post Flop action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
 
 
+
                     if (gameState.HasFlush())
                     {
-                        Logger.LogHelper.Log("type=Pre Flop Flush action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
-
                         bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 1000) - gameState.GetCurrentPlayer().Bet;
                     }
                     else if (gameState.HasFourOfAKind())
                     {
-                        Logger.LogHelper.Log("type=Post Flop Four of a kind action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
-
                         bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 800) - gameState.GetCurrentPlayer().Bet;
 
                     }
                     else if (gameState.HasThreeOfAKind())
                     {
-                        Logger.LogHelper.Log("type=Post Flop Three of a kind action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
-
-
-                        if (gameState.OwnCards.Any(
-                                card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank)))
-                        {
-
-                            bet = gameState.CurrentBuyIn + Math.Min(gameState.MinimumRaise, 200) -
-                                  gameState.GetCurrentPlayer().Bet;
-
-                        }
-                        //else if (gameState.OwnCards.Any(card => (int)card.Rank >= 10))
-                        //{
-                        //    bet += gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
-                        //}
-                        else
-                        {
-                            //van pár, de béna kártyáink vannak, akkor csak tartjuk
-                            bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
-                        }
+                        bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 200) - gameState.GetCurrentPlayer().Bet;
 
                     }
                     else if (gameState.HasPair())
                     {
-                        Logger.LogHelper.Log("type=Post Flop Two of a kind action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
+                        bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 100) - gameState.GetCurrentPlayer().Bet;
 
-                        if (gameState.OwnCards.Any(
-                                card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank)))
-                            bet = gameState.CurrentBuyIn + Math.Min(gameState.MinimumRaise, 100) - gameState.GetCurrentPlayer().Bet;
-                        //else if (gameState.OwnCards.All(card => gameState.CommunityCards.Any(cc => cc.Rank <= card.Rank)))
-                        //{
-                        //    //nem a mi kezünkben van a pár, de minden kártyánk nagyon a flopnál
-                        //    bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 50) -
-                        //           gameState.GetCurrentPlayer().Bet;
-                        //}
-                        else
-                        {
-                            //van pár, de béna kártyáink vannak, akkor csak tartjuk
-                            bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
-                        }
                     }
                     else
                     {
