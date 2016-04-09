@@ -25,7 +25,7 @@ namespace Nancy.Simple
             {
                 //TODO: Use this method to return the value You want to bet
                 Logger.LogHelper.Log("type=bet_begin action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
-               
+                bet = new Random().Next() % 2 == 0 ? 100 : 0;
             }
             catch (Exception ex)
             {
