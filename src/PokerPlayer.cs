@@ -55,7 +55,7 @@ namespace Nancy.Simple
                 bool hasOneCardOfTwoOrThree = gameState.OwnCards.Any(
                     card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank));
 
-                if (gameState.CurrentBuyIn >= 1000 && (pairOrThree && hasOneCardOfTwoOrThree) && new Random().Next() % 2 == 0)
+                if (gameState.CurrentBuyIn >= 100 && (pairOrThree && hasOneCardOfTwoOrThree) && new Random().Next() % 2 == 0)
                 {
                     bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
                 }
