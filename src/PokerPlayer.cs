@@ -24,7 +24,6 @@ namespace Nancy.Simple
 
             try
             {
-                //TODO: Use this method to return the value You want to bet
                 Logger.LogHelper.Log("type=bet_begin action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
                 if (gameState.HasFlush())
                 {
@@ -42,6 +41,9 @@ namespace Nancy.Simple
                 {
                     bet = 100;
                 }
+
+                Logger.LogHelper.Error("request_id={0} game_id={1} bet={2}", requestId, gameState.GameId, bet);
+
             }
             catch (Exception ex)
             {
