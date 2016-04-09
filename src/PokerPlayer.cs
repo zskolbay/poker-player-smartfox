@@ -49,10 +49,10 @@ namespace Nancy.Simple
                             bet += gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
                         }
                     }
-                    //else if (gameState.OwnCards.Any(card => (int)card.Rank >= 10))
-                    //{
-                    //    bet += gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
-                    //}
+                    else if (gameState.OwnCards.Any(card => (int)card.Rank >= 10))
+                    {
+                        bet += gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
+                    }
                 }
                 else
                 {
@@ -69,13 +69,29 @@ namespace Nancy.Simple
                     }
                     else if (gameState.HasThreeOfAKind())
                     {
-                        bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 200) - gameState.GetCurrentPlayer().Bet;
+                        if (gameState.OwnCards.Any(
+                                card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank)))
+                        {
+
+                            bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 200) -
+                                  gameState.GetCurrentPlayer().Bet;
+
+                        }
+                        else if (gameState.OwnCards.Any(card => (int)card.Rank >= 10))
+                        {
+                            bet += gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
+                        }
 
                     }
                     else if (gameState.HasPair())
                     {
-                        bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 50) - gameState.GetCurrentPlayer().Bet;
-
+                        if (gameState.OwnCards.Any(
+                                card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank)))
+                            bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 50) - gameState.GetCurrentPlayer().Bet;
+                        else if (gameState.OwnCards.Any(card => (int)card.Rank >= 10))
+                        {
+                            bet += gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
+                        }
                     }
                     else
                     {
