@@ -26,7 +26,22 @@ namespace Nancy.Simple
             {
                 //TODO: Use this method to return the value You want to bet
                 Logger.LogHelper.Log("type=bet_begin action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
-                bet = new Random().Next() % 4 == 0 ? 50 : 0;
+                if (gameState.HasFlush())
+                {
+                    bet = 500;
+                }
+                else if (gameState.HasFourOfAKind())
+                {
+                    bet = 300;
+                }
+                else if (gameState.HasThreeOfAKind())
+                {
+                    bet = 200;
+                }
+                else if (gameState.HasPair())
+                {
+                    bet = 100;
+                }
             }
             catch (Exception ex)
             {
