@@ -35,7 +35,7 @@ namespace Nancy.Simple
                     {
                         Logger.LogHelper.Log("type=Pre Flop Has Pair action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
 
-                        bet += gameState.CurrentBuyIn + gameState.MinimumRaise - gameState.GetCurrentPlayer().Bet;
+                        bet += Math.Min(gameState.CurrentBuyIn + gameState.MinimumRaise - gameState.GetCurrentPlayer().Bet, 100);
                     }
                     else if (gameState.CardsBySuit.Count() == 1)
                     {
@@ -46,29 +46,40 @@ namespace Nancy.Simple
 
                         if (Math.Abs((int)firstCard.Rank - (int)secondCard.Rank) <= 1)
                         {
-                            bet += gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
+                            bet += Math.Min(gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet, 100);
                         }
                     }
                     else if (gameState.OwnCards.Any(card => (int)card.Rank >= 10))
                     {
-                        bet += gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
+                        Logger.LogHelper.Log("type=Pre Flop Has Possible High Hand action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
+
+                        bet += Math.Min(100, gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet);
                     }
                 }
                 else
                 {
                     // Post Flop
+                    Logger.LogHelper.Log("type=Post Flop action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
+
 
                     if (gameState.HasFlush())
                     {
+                        Logger.LogHelper.Log("type=Pre Flop Flush action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
+
                         bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 1000) - gameState.GetCurrentPlayer().Bet;
                     }
                     else if (gameState.HasFourOfAKind())
                     {
+                        Logger.LogHelper.Log("type=Post Flop Four of a kind action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
+
                         bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 800) - gameState.GetCurrentPlayer().Bet;
 
                     }
                     else if (gameState.HasThreeOfAKind())
                     {
+                        Logger.LogHelper.Log("type=Post Flop Three of a kind action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
+
+
                         if (gameState.OwnCards.Any(
                                 card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank)))
                         {
@@ -85,6 +96,8 @@ namespace Nancy.Simple
                     }
                     else if (gameState.HasPair())
                     {
+                        Logger.LogHelper.Log("type=Post Flop Two of a kind action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
+
                         if (gameState.OwnCards.Any(
                                 card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank)))
                             bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 100) - gameState.GetCurrentPlayer().Bet;
