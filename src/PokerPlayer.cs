@@ -27,7 +27,16 @@ namespace Nancy.Simple
             {
                 Logger.LogHelper.Log("type=bet_begin action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
 
-                if (gameState.GetCurrentPlayer().Stack < 100 && !gameState.IsSmallBlind() && !gameState.IsBigBlind())
+                bool pairOrThree = gameState.HasPair() || gameState.HasThreeOfAKind();
+                bool hasOneCardOfTwoOrThree = gameState.OwnCards.Any(
+                    card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank));
+
+                if (gameState.CurrentBuyIn >= 100 && (pairOrThree && hasOneCardOfTwoOrThree))
+                {
+                    bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
+                }
+
+                else if (gameState.GetCurrentPlayer().Stack < 100 && !gameState.IsSmallBlind() && !gameState.IsBigBlind())
                 {
                     //nincs pénzünk ÉS nem vagyunk kis/nagy vak
                     bet = 0;
