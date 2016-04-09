@@ -38,10 +38,14 @@ namespace Nancy.Simple
                         var firstCard = gameState.CardsBySuit.Single().First();
                         var secondCard = gameState.CardsBySuit.Single().Last();
 
-                        if (Math.Abs(firstCard.Rank - secondCard.Rank) <= 2)
+                        if (Math.Abs((int)firstCard.Rank - (int)secondCard.Rank) <= 2)
                         {
                             bet += gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
                         }
+                    }
+                    else if (gameState.OwnCards.Any(card => (int)card.Rank >= 10))
+                    {
+                        bet += gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
                     }
                 }
                 else
