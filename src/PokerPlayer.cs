@@ -69,7 +69,7 @@ namespace Nancy.Simple
                     }
                     else
                     {
-                        if (new Random().Next()%4 == 0)
+                        if (new Random().Next()%10 == 0)
                         {
                             bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 50) -
                                   gameState.GetCurrentPlayer().Bet;
