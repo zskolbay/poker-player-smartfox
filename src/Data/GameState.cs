@@ -139,5 +139,31 @@ namespace Nancy.Simple
         {
             return CurrentBuyIn - GetCurrentPlayer().Bet;
         }
+
+        public bool IsSmallBlind()
+        {
+            int lastPlayerIndex = Players.Count() - 1;
+
+            //dealer is not the last player
+            if (Dealer < lastPlayerIndex - 1)
+                return Dealer + 1 == InAction;
+
+            //(Dealer == lastPlayerIndex)
+            return 0 == InAction;
+        }
+
+        public bool IsBigBlind()
+        {
+            int lastPlayerIndex = Players.Count() - 1;
+
+            //dealer is not the last player
+            if (Dealer < lastPlayerIndex - 2)
+                return Dealer + 2 == InAction;
+            if (Dealer == lastPlayerIndex - 1)
+                return 0 == InAction;
+
+            //(Dealer == lastPlayerIndex)
+            return 1 == InAction;
+        }
     }
 }

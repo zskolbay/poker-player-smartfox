@@ -27,8 +27,9 @@ namespace Nancy.Simple
             {
                 Logger.LogHelper.Log("type=bet_begin action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
 
-                if (gameState.GetCurrentPlayer().Stack < 100)
+                if (gameState.GetCurrentPlayer().Stack < 100 && !gameState.IsSmallBlind() && !gameState.IsBigBlind())
                 {
+                    //nincs pénzünk ÉS nem vagyunk kis/nagy vak
                     bet = 0;
                 }
                 else if (false)//(gameState.CommunityCards.Count() <= 2)
