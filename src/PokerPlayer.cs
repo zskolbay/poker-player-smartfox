@@ -81,7 +81,7 @@ namespace Nancy.Simple
 
                     }
                     // If we have four suit
-                    else if (gameState.CardsBySuit.Count() <= 4)
+                    else if (gameState.CardsBySuit.Count() >= 4)
                     {
                         Logger.LogHelper.Log("type=Post Flop Four of a suit action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
                         bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 1000) - gameState.GetCurrentPlayer().Bet;
