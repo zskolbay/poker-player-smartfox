@@ -81,12 +81,6 @@ namespace Nancy.Simple
                         bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 800) - gameState.GetCurrentPlayer().Bet;
 
                     }
-                    // If we have four suit
-                    else if (gameState.CardsBySuit.Count() >= 4)
-                    {
-                        Logger.LogHelper.Log("type=Post Flop Four of a suit action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
-                        bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 1000) - gameState.GetCurrentPlayer().Bet;
-                    }
                     else if (gameState.HasThreeOfAKind())
                     {
                         Logger.LogHelper.Log("type=Post Flop Three of a kind action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
@@ -96,7 +90,7 @@ namespace Nancy.Simple
                                 card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank)))
                         {
 
-                            bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 200) -
+                            bet = gameState.CurrentBuyIn + Math.Min(gameState.MinimumRaise, 200) -
                                   gameState.GetCurrentPlayer().Bet;
 
                         }
@@ -117,7 +111,7 @@ namespace Nancy.Simple
 
                         if (gameState.OwnCards.Any(
                                 card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank)))
-                            bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 100) - gameState.GetCurrentPlayer().Bet;
+                            bet = gameState.CurrentBuyIn + Math.Min(gameState.MinimumRaise, 100) - gameState.GetCurrentPlayer().Bet;
                         //else if (gameState.OwnCards.All(card => gameState.CommunityCards.Any(cc => cc.Rank <= card.Rank)))
                         //{
                         //    //nem a mi kezünkben van a pár, de minden kártyánk nagyon a flopnál
