@@ -26,15 +26,21 @@ namespace Nancy.Simple
             try
             {
                 Logger.LogHelper.Log("type=bet_begin action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
-                if (gameState.OwnCards.Count() <= 2)
+                if (false)// gameState.OwnCards.Count() <= 2)
                 {
                     // Pre Flop
+                    Logger.LogHelper.Log("type=Pre Flop block action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
+
                     if (gameState.HasPair())
                     {
+                        Logger.LogHelper.Log("type=Pre Flop Has Pair action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
+
                         bet += gameState.CurrentBuyIn + gameState.MinimumRaise - gameState.GetCurrentPlayer().Bet;
                     }
                     else if (gameState.CardsBySuit.Count() == 1)
                     {
+                        Logger.LogHelper.Log("type=Pre Flop block action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
+
                         var firstCard = gameState.CardsBySuit.Single().First();
                         var secondCard = gameState.CardsBySuit.Single().Last();
 
