@@ -66,7 +66,7 @@ namespace Nancy.Simple
                     }
                 }
 
-                Logger.LogHelper.Error("request_id={0} game_id={1} bet={2}", requestId, gameState.GameId, bet);
+                Logger.LogHelper.Log("request_id={0} game_id={1} bet={2}", requestId, gameState.GameId, bet);
 
             }
             catch (Exception ex)
