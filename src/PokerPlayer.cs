@@ -50,19 +50,34 @@ namespace Nancy.Simple
 
                     if (gameState.HasFlush())
                     {
-                        bet = 500;
+                        bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 1000) - gameState.GetCurrentPlayer().Bet;
                     }
                     else if (gameState.HasFourOfAKind())
                     {
-                        bet = 300;
+                        bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 800) - gameState.GetCurrentPlayer().Bet;
+
                     }
                     else if (gameState.HasThreeOfAKind())
                     {
-                        bet = 200;
+                        bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 200) - gameState.GetCurrentPlayer().Bet;
+
                     }
                     else if (gameState.HasPair())
                     {
-                        bet = 100;
+                        bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 50) - gameState.GetCurrentPlayer().Bet;
+
+                    }
+                    else
+                    {
+                        if (new Random().Next()%4 == 0)
+                        {
+                            bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 50) -
+                                  gameState.GetCurrentPlayer().Bet;
+                        }
+                        else
+                        {
+                            bet = 0;
+                        }
                     }
                 }
 
