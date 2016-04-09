@@ -5,8 +5,8 @@ using Newtonsoft.Json.Linq;
 
 namespace Nancy.Simple
 {
-	public static class PokerPlayer
-	{
+    public static class PokerPlayer
+    {
         private static Guid requestId = Guid.NewGuid();
         public static Guid RequestId { get { return requestId; } }
         public static Guid GenerateRequestId()
@@ -15,60 +15,19 @@ namespace Nancy.Simple
         }
 
 
-		public static readonly string VERSION = "Default C# folding player";
+        public static readonly string VERSION = "Default C# folding player";
 
-	    public static void LogPlayer(Player p)
-	    {
-	        if (p.HoleCards.Any())
-	        {
-	            Logger.LogHelper.Log("{0}, Bet={1}, Stack={3}, Cards={2}", p.Name, p.Bet, String.Join(",", p.HoleCards),
-	                p.Stack);
-	        }
-	    }
-
-	    //public static bool OnlyPlayerRemains(GameState gameState, string playerName)
-	    //{
-	        
-	    //}
-
-		public static int BetRequest(JObject jsonState, Request req)
-		{
-			//TODO: Use this method to return the value You want to bet
-		    int bet = 0;
+        public static int BetRequest(JObject jsonState)
+        {
+            //TODO: Use this method to return the value You want to bet
+            int bet = 0;
             var gameState = JsonConvert.DeserializeObject<GameState>(jsonState.ToString());
-
-		    try
-		    {
-                Logger.LogHelper.Log("REQUEST='{0}'", jsonState.ToString());
-
-
-                foreach (var player in gameState.Players)
-		        {
-		            LogPlayer(player);
-		        }
-		    }
-		    catch
-		    {
-		        
-		    }
 
             try
             {
                 Logger.LogHelper.Log("type=bet_begin action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
 
-                var greenPlayer = gameState.Players.SingleOrDefault(pl => pl.Name == "DROP TABLE Students");
-
-
-                bool pairOrThree = gameState.HasPair() || gameState.HasThreeOfAKind();
-                bool hasOneCardOfTwoOrThree = gameState.OwnCards.Any(
-                    card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank));
-
-                if (gameState.CurrentBuyIn >= 100 && (pairOrThree && hasOneCardOfTwoOrThree))
-                {
-                    bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
-                }
-
-                else if (gameState.GetCurrentPlayer().Stack < 100 && !gameState.IsSmallBlind() && !gameState.IsBigBlind())
+                if (gameState.GetCurrentPlayer().Stack < 100 && !gameState.IsSmallBlind() && !gameState.IsBigBlind())
                 {
                     //nincs pénzünk ÉS nem vagyunk kis/nagy vak
                     bet = 0;
@@ -122,12 +81,6 @@ namespace Nancy.Simple
                         bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 800) - gameState.GetCurrentPlayer().Bet;
 
                     }
-                    // If we have four suit
-                    else if (gameState.CardsBySuit.Count() >= 4)
-                    {
-                        Logger.LogHelper.Log("type=Post Flop Four of a suit action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
-                        bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 1000) - gameState.GetCurrentPlayer().Bet;
-                    }
                     else if (gameState.HasThreeOfAKind())
                     {
                         Logger.LogHelper.Log("type=Post Flop Three of a kind action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
@@ -137,7 +90,7 @@ namespace Nancy.Simple
                                 card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank)))
                         {
 
-                            bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 200) -
+                            bet = gameState.CurrentBuyIn + Math.Min(gameState.MinimumRaise, 200) -
                                   gameState.GetCurrentPlayer().Bet;
 
                         }
@@ -148,7 +101,7 @@ namespace Nancy.Simple
                         else
                         {
                             //van pár, de béna kártyáink vannak, akkor csak tartjuk
-                            bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet + Math.Max(50, gameState.MinimumRaise);
+                            bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
                         }
 
                     }
@@ -158,7 +111,7 @@ namespace Nancy.Simple
 
                         if (gameState.OwnCards.Any(
                                 card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank)))
-                            bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 100) - gameState.GetCurrentPlayer().Bet;
+                            bet = gameState.CurrentBuyIn + Math.Min(gameState.MinimumRaise, 100) - gameState.GetCurrentPlayer().Bet;
                         //else if (gameState.OwnCards.All(card => gameState.CommunityCards.Any(cc => cc.Rank <= card.Rank)))
                         //{
                         //    //nem a mi kezünkben van a pár, de minden kártyánk nagyon a flopnál
@@ -171,22 +124,17 @@ namespace Nancy.Simple
                             bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
                         }
                     }
-                    else if (gameState.OwnCards.All(card => (int) card.Rank >= 11))
-                    {
-                        bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 50) -
-                                  gameState.GetCurrentPlayer().Bet;
-                    }
                     else
                     {
-                        if (new Random().Next() % 5 == 0)
-                        {
-                            bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 50) -
-                                  gameState.GetCurrentPlayer().Bet;
-                        }
-                        else
-                        {
-                            bet = 0;
-                        }
+                        //if (new Random().Next()%10 == 0)
+                        //{
+                        //    bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 50) -
+                        //          gameState.GetCurrentPlayer().Bet;
+                        //}
+                        //else
+                        //{
+                        //    bet = 0;
+                        //}
                     }
                 }
 
@@ -201,12 +149,12 @@ namespace Nancy.Simple
 
             return bet;
 
-		}
+        }
 
-		public static void ShowDown(JObject gameState)
-		{
-			//TODO: Use this method to showdown
-		}
-	}
+        public static void ShowDown(JObject gameState)
+        {
+            //TODO: Use this method to showdown
+        }
+    }
 }
 
