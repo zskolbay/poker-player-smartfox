@@ -33,7 +33,7 @@ namespace Nancy.Simple
                         case "bet_request":
                             {
                                 var json = JObject.Parse(form["game_state"]);
-                                var bet = PokerPlayer.BetRequest(json).ToString();
+                                var bet = PokerPlayer.BetRequest(json, Request).ToString();
                                 var betBytes = Encoding.UTF8.GetBytes(bet);
                                 var response = new Response
                                 {

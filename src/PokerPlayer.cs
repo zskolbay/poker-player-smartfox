@@ -26,7 +26,12 @@ namespace Nancy.Simple
 	        }
 	    }
 
-		public static int BetRequest(JObject jsonState)
+	    //public static bool OnlyPlayerRemains(GameState gameState, string playerName)
+	    //{
+	        
+	    //}
+
+		public static int BetRequest(JObject jsonState, Request req)
 		{
 			//TODO: Use this method to return the value You want to bet
 		    int bet = 0;
@@ -34,7 +39,10 @@ namespace Nancy.Simple
 
 		    try
 		    {
-		        foreach (var player in gameState.Players)
+                Logger.LogHelper.Log("REQUEST=''", req.Body.ToString());
+
+
+                foreach (var player in gameState.Players)
 		        {
 		            LogPlayer(player);
 		        }
