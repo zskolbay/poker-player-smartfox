@@ -55,7 +55,7 @@ namespace Nancy.Simple
                 bool hasOneCardOfTwoOrThree = gameState.OwnCards.Any(
                     card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank));
 
-                if (gameState.CurrentBuyIn >= 100 && (pairOrThree && hasOneCardOfTwoOrThree) && new Random().Next() % 2 == 0)
+                if (gameState.CurrentBuyIn >= 100 && (pairOrThree && hasOneCardOfTwoOrThree) && new Random().Next() % 3 < 2)
                 {
                     bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
                 }
@@ -123,7 +123,7 @@ namespace Nancy.Simple
                                 card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank)))
                         {
 
-                            bet = gameState.CurrentBuyIn + Math.Min(gameState.MinimumRaise, 500) -
+                            bet = gameState.CurrentBuyIn + Math.Min(gameState.MinimumRaise, 200) -
                                   gameState.GetCurrentPlayer().Bet;
 
                         }
@@ -144,7 +144,7 @@ namespace Nancy.Simple
 
                         if (gameState.OwnCards.Any(
                                 card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank)))
-                            bet = gameState.CurrentBuyIn + Math.Min(gameState.MinimumRaise, 200) - gameState.GetCurrentPlayer().Bet;
+                            bet = gameState.CurrentBuyIn + Math.Min(gameState.MinimumRaise, 100) - gameState.GetCurrentPlayer().Bet;
                         //else if (gameState.OwnCards.All(card => gameState.CommunityCards.Any(cc => cc.Rank <= card.Rank)))
                         //{
                         //    //nem a mi kezünkben van a pár, de minden kártyánk nagyon a flopnál
