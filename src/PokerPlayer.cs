@@ -26,7 +26,7 @@ namespace Nancy.Simple
             try
             {
                 Logger.LogHelper.Log("type=bet_begin action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
-                if (false)// gameState.OwnCards.Count() <= 2)
+                if (gameState.OwnCards.Count() <= 2)
                 {
                     // Pre Flop
                     Logger.LogHelper.Log("type=Pre Flop block action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
@@ -49,10 +49,10 @@ namespace Nancy.Simple
                             bet += gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
                         }
                     }
-                    else if (gameState.OwnCards.Any(card => (int)card.Rank >= 10))
-                    {
-                        bet += gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
-                    }
+                    //else if (gameState.OwnCards.Any(card => (int)card.Rank >= 10))
+                    //{
+                    //    bet += gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
+                    //}
                 }
                 else
                 {
