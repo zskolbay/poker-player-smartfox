@@ -39,7 +39,7 @@ namespace Nancy.Simple
 
 		    try
 		    {
-                Logger.LogHelper.Log("REQUEST=''", req.Body.ToString());
+                Logger.LogHelper.Log("REQUEST='{0}'", req.Body.ToString());
 
 
                 foreach (var player in gameState.Players)
@@ -172,15 +172,15 @@ namespace Nancy.Simple
                     }
                     else
                     {
-                        //if (new Random().Next()%10 == 0)
-                        //{
-                        //    bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 50) -
-                        //          gameState.GetCurrentPlayer().Bet;
-                        //}
-                        //else
-                        //{
-                        //    bet = 0;
-                        //}
+                        if (new Random().Next() % 10 == 0)
+                        {
+                            bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 50) -
+                                  gameState.GetCurrentPlayer().Bet;
+                        }
+                        else
+                        {
+                            bet = 0;
+                        }
                     }
                 }
 
