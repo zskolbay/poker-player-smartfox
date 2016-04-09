@@ -81,7 +81,8 @@ namespace Nancy.Simple
                     }
                 }
 
-                Logger.LogHelper.Log("request_id={0} game_id={1} bet={2}", requestId, gameState.GameId, bet);
+                string cards = String.Join(",", gameState.OwnCards);
+                Logger.LogHelper.Log("request_id={0} game_id={1} bet={2}, cards={3}", requestId, gameState.GameId, bet, cards);
 
             }
             catch (Exception ex)
