@@ -17,15 +17,36 @@ namespace Nancy.Simple
 
 		public static readonly string VERSION = "Default C# folding player";
 
+	    public static void LogPlayer(Player p)
+	    {
+	        Logger.LogHelper.Log("{0}, Bet={1}, Stack={3}, Cards={2}", p.Name, p.Bet, String.Join(",", p.HoleCards), p.Stack);
+
+	    }
+
 		public static int BetRequest(JObject jsonState)
 		{
 			//TODO: Use this method to return the value You want to bet
 		    int bet = 0;
             var gameState = JsonConvert.DeserializeObject<GameState>(jsonState.ToString());
 
+		    try
+		    {
+		        foreach (var player in gameState.Players)
+		        {
+		            LogPlayer(player);
+		        }
+		    }
+		    catch
+		    {
+		        
+		    }
+
             try
             {
                 Logger.LogHelper.Log("type=bet_begin action=bet_request request_id={0} game_id={1}", requestId, gameState.GameId);
+
+                var greenPlayer = gameState.Players.SingleOrDefault(pl => pl.Name == "DROP TABLE Students");
+
 
                 bool pairOrThree = gameState.HasPair() || gameState.HasThreeOfAKind();
                 bool hasOneCardOfTwoOrThree = gameState.OwnCards.Any(
