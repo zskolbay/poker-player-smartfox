@@ -55,7 +55,7 @@ namespace Nancy.Simple
                 bool hasOneCardOfTwoOrThree = gameState.OwnCards.Any(
                     card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank));
 
-                if (gameState.CurrentBuyIn >= 100 && (pairOrThree && hasOneCardOfTwoOrThree) && new Random().Next() % 3 < 2)
+                if (gameState.CurrentBuyIn >= 100 && (pairOrThree && hasOneCardOfTwoOrThree))
                 {
                     bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
                 }
@@ -156,6 +156,11 @@ namespace Nancy.Simple
                             //van pár, de béna kártyáink vannak, akkor csak tartjuk
                             bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
                         }
+                    }
+                    else if (gameState.OwnCards.All(card => (int) card.Rank >= 11))
+                    {
+                        bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 50) -
+                                  gameState.GetCurrentPlayer().Bet;
                     }
                     else
                     {
