@@ -103,6 +103,11 @@ namespace Nancy.Simple
                         //{
                         //    bet += gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
                         //}
+                        else
+                        {
+                            //van pár, de béna kártyáink vannak, akkor csak tartjuk
+                            bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
+                        }
 
                     }
                     else if (gameState.HasPair())
@@ -118,11 +123,11 @@ namespace Nancy.Simple
                         //    bet = gameState.CurrentBuyIn + Math.Max(gameState.MinimumRaise, 50) -
                         //           gameState.GetCurrentPlayer().Bet;
                         //}
-                        //else
-                        //{
-                        //    //van pár, de béna kártyáink vannak, akkor csak tartjuk
-                        //    bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
-                        //}
+                        else
+                        {
+                            //van pár, de béna kártyáink vannak, akkor csak tartjuk
+                            bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
+                        }
                     }
                     else
                     {
