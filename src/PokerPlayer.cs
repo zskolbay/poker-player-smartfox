@@ -19,8 +19,11 @@ namespace Nancy.Simple
 
 	    public static void LogPlayer(Player p)
 	    {
-	        Logger.LogHelper.Log("{0}, Bet={1}, Stack={3}, Cards={2}", p.Name, p.Bet, String.Join(",", p.HoleCards), p.Stack);
-
+	        if (p.HoleCards.Any())
+	        {
+	            Logger.LogHelper.Log("{0}, Bet={1}, Stack={3}, Cards={2}", p.Name, p.Bet, String.Join(",", p.HoleCards),
+	                p.Stack);
+	        }
 	    }
 
 		public static int BetRequest(JObject jsonState)
@@ -52,7 +55,7 @@ namespace Nancy.Simple
                 bool hasOneCardOfTwoOrThree = gameState.OwnCards.Any(
                     card => gameState.CommunityCards.Any(commCard => card.Rank == commCard.Rank));
 
-                if (gameState.CurrentBuyIn >= 1000 && (pairOrThree && hasOneCardOfTwoOrThree))
+                if (gameState.CurrentBuyIn >= 1000 && (pairOrThree && hasOneCardOfTwoOrThree) && new Random().Next() % 2 == 0)
                 {
                     bet = gameState.CurrentBuyIn - gameState.GetCurrentPlayer().Bet;
                 }
